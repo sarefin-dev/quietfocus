@@ -3,17 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuietFocus — Distraction-Free Writing Timer for Creators</title>
-  <meta name="description" content="Write more, worry less. QuietFocus combines Pomodoro-style focus sessions with ambient soundscapes and streak tracking to help writers stay in flow.">
-  <meta property="og:title" content="QuietFocus — Distraction-Free Writing Timer for Creators">
-  <meta property="og:description" content="Write more, worry less. QuietFocus combines Pomodoro-style focus sessions with ambient soundscapes and streak tracking to help writers stay in flow.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://sarefin-dev.github.io/quietfocus/">
-  <meta property="og:image" content="og-image.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="QuietFocus — Distraction-Free Writing Timer for Creators">
-  <meta name="twitter:description" content="Write more, worry less. QuietFocus combines Pomodoro-style focus sessions with ambient soundscapes and streak tracking to help writers stay in flow.">
-  <meta name="twitter:image" content="og-image.png">
+  <meta name="description" content="QuietFocus — The distraction-free writing timer that keeps you in flow.">
+  <title>QuietFocus — Write more. Worry less.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -88,6 +79,10 @@
       z-index: 100;
       border-bottom: 1px solid transparent;
       transition: border-color 0.3s ease;
+    }
+
+    header.scrolled {
+      border-bottom-color: var(--border);
     }
 
     .navbar {
@@ -198,6 +193,14 @@
       color: var(--text-primary);
     }
 
+    .section-subheading {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: var(--text-body);
+      max-width: 560px;
+      margin: calc(var(--space-6) * -1) auto var(--space-6);
+    }
+
     /* ===== Hero ===== */
     .hero {
       text-align: center;
@@ -229,26 +232,6 @@
       margin-bottom: var(--space-3);
       color: var(--text-primary);
       min-height: 1.1em;
-      text-shadow:
-        0 0 8px rgba(232, 114, 92, 0.5),
-        0 0 16px rgba(232, 114, 92, 0.25),
-        0 0 32px rgba(91, 140, 110, 0.15);
-      animation: neon-glow 4s ease-in-out infinite;
-    }
-
-    @keyframes neon-glow {
-      0%, 100% {
-        text-shadow:
-          0 0 8px rgba(232, 114, 92, 0.5),
-          0 0 16px rgba(232, 114, 92, 0.25),
-          0 0 32px rgba(91, 140, 110, 0.15);
-      }
-      50% {
-        text-shadow:
-          0 0 12px rgba(232, 114, 92, 0.8),
-          0 0 28px rgba(232, 114, 92, 0.45),
-          0 0 48px rgba(91, 140, 110, 0.3);
-      }
     }
 
     .typewriter-cursor {
@@ -259,9 +242,6 @@
       margin-left: 2px;
       vertical-align: -0.05em;
       animation: blink 1s step-end infinite;
-      box-shadow:
-        0 0 8px var(--accent),
-        0 0 16px rgba(232, 114, 92, 0.6);
     }
 
     @keyframes blink {
@@ -301,32 +281,16 @@
 
     @keyframes cta-pulse {
       0% {
-        box-shadow:
-          0 0 0 0 rgba(232, 114, 92, 0.4),
-          0 0 20px rgba(232, 114, 92, 0.3);
+        box-shadow: 0 0 0 0 rgba(232, 114, 92, 0.35);
       }
       100% {
-        box-shadow:
-          0 0 0 20px rgba(232, 114, 92, 0),
-          0 0 40px rgba(232, 114, 92, 0);
+        box-shadow: 0 0 0 20px rgba(232, 114, 92, 0);
       }
     }
 
     .hero-actions .btn {
       font-size: var(--text-body);
       padding: var(--space-2) var(--space-4);
-    }
-
-    .hero-actions .btn-primary {
-      box-shadow:
-        0 0 20px rgba(232, 114, 92, 0.3),
-        0 4px 16px rgba(232, 114, 92, 0.2);
-    }
-
-    .hero-actions .btn-primary:hover {
-      box-shadow:
-        0 0 28px rgba(232, 114, 92, 0.5),
-        0 8px 24px rgba(232, 114, 92, 0.3);
     }
 
     .hero-actions .link {
@@ -351,6 +315,13 @@
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    .feature-card.reveal,
+    .step.reveal,
+    .testimonial.reveal,
+    .price-card.reveal {
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
     }
 
     /* ===== Features ===== */
@@ -802,11 +773,6 @@
         scroll-behavior: auto;
       }
 
-      .hero h1 {
-        animation: none;
-        text-shadow: none;
-      }
-
       .typewriter-cursor {
         display: none;
       }
@@ -1090,16 +1056,16 @@
   <!-- 1. Navigation -->
   <header id="header">
     <div class="container">
-      <nav class="navbar" aria-label="Main navigation">
+      <nav class="navbar">
         <div class="logo">
-          <img src="logo.png" alt="QuietFocus logo">
+          <img src="logo.png" alt="QuietFocus">
         </div>
-        <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
           <span></span>
           <span></span>
           <span></span>
         </button>
-        <ul class="nav-links" id="nav-links">
+        <ul class="nav-links">
           <li><a href="#features">Features</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#pricing">Pricing</a></li>
@@ -1110,9 +1076,8 @@
   </header>
 
   <!-- 2. Hero -->
-  <main>
-  <section class="hero" aria-label="Hero">
-    <canvas class="hero-canvas" aria-hidden="true" role="presentation"></canvas>
+  <section class="hero">
+    <canvas class="hero-canvas"></canvas>
     <div class="container">
       <h1>Write more. Worry less.</h1>
       <p class="hero-reveal">The distraction-free writing timer that keeps you in flow. Set your timer, pick your soundscape, and just write.</p>
@@ -1124,9 +1089,9 @@
   </section>
 
   <!-- 3. Features -->
-  <section id="features" class="section-white" aria-labelledby="features-heading">
+  <section id="features" class="section-white">
     <div class="container">
-      <h2 class="section-heading" id="features-heading">Everything you need to stay in flow</h2>
+      <h2 class="section-heading">Everything you need to stay in flow</h2>
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">⏱️</div>
@@ -1153,9 +1118,9 @@
   </section>
 
   <!-- 4. How It Works -->
-  <section id="how-it-works" class="section-warm" aria-labelledby="how-it-works-heading">
+  <section id="how-it-works" class="section-warm">
     <div class="container">
-      <h2 class="section-heading" id="how-it-works-heading">Start writing in 3 steps</h2>
+      <h2 class="section-heading">Start writing in 3 steps</h2>
       <div class="steps">
         <div class="step">
           <div class="step-number">1</div>
@@ -1177,7 +1142,7 @@
   </section>
 
   <!-- 5. Social Proof -->
-  <section id="social-proof" class="section-white" aria-label="Social proof">
+  <section id="social-proof" class="section-white">
     <div class="container">
       <div class="testimonials">
         <div class="testimonial">
@@ -1207,9 +1172,9 @@
   </section>
 
   <!-- 6. Pricing -->
-  <section id="pricing" class="section-warm" aria-labelledby="pricing-heading">
+  <section id="pricing" class="section-warm">
     <div class="container">
-      <h2 class="section-heading" id="pricing-heading">Simple, transparent pricing</h2>
+      <h2 class="section-heading">Simple, transparent pricing</h2>
       <div class="pricing-grid">
         <div class="price-card">
           <h3>Starter</h3>
@@ -1250,18 +1215,18 @@
   </section>
 
   <!-- 7. Final CTA -->
-  <section id="cta" class="final-cta" aria-labelledby="cta-heading">
+  <section id="cta" class="final-cta">
     <div class="container">
-      <h2 id="cta-heading">Your next great piece starts with one focused session.</h2>
+      <h2>Your next great piece starts with one focused session.</h2>
       <p>Join 12,000+ writers who write more and worry less.</p>
       <a href="#" class="btn btn-primary">Start Writing Free →</a>
     </div>
   </section>
 
   <!-- 8. Get in Touch -->
-  <section id="contact" class="section-white" aria-labelledby="contact-heading">
+  <section id="contact" class="section-white">
     <div class="container">
-      <h2 class="section-heading" id="contact-heading">Questions? We'd love to hear from you.</h2>
+      <h2 class="section-heading">Questions? We'd love to hear from you.</h2>
       <p class="contact-subtext">Whether you're curious about features, pricing, or just want to say hi — drop us a line.</p>
       <form class="contact-form" action="https://formspree.io/f/xdenlawg" method="POST">
         <div class="form-field">
@@ -1281,15 +1246,14 @@
       </form>
     </div>
   </section>
-  </main>
 
   <!-- 9. Footer -->
-  <footer aria-label="Footer">
+  <footer>
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="logo">
-            <img src="logo.png" alt="QuietFocus logo">
+            <img src="logo.png" alt="QuietFocus">
           </div>
           <p>Write more. Worry less.</p>
         </div>
@@ -1321,7 +1285,7 @@
     </div>
   </footer>
 
-  <script defer>
+  <script>
     (function () {
       var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1451,10 +1415,7 @@
             ctx.beginPath();
             ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(' + d.color + ', 0.15)';
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = 'rgba(' + d.color + ', 0.4)';
             ctx.fill();
-            ctx.shadowBlur = 0;
           }
 
           raf(animateDots);
