@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="QuietFocus — The distraction-free writing timer that keeps you in flow.">
+  <title>QuietFocus — Write more. Worry less.</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #222;
+      background: #fff;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #444;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: #000;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: #222;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #000;
+    }
+
+    .btn-secondary {
+      border: 1px solid #ccc;
+      color: #222;
+    }
+
+    /* Sections */
+    section {
+      padding: 80px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 120px 0;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 620px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero-actions .link {
+      color: #444;
+      text-decoration: underline;
+    }
+
+    /* Section headings */
+    .section-heading {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 56px;
+    }
+
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 28px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .feature-card p {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    /* How It Works */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .step {
+      padding: 28px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .step-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #999;
+      margin-bottom: 12px;
+    }
+
+    .step h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .step p {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    /* Social proof */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    .testimonial {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 28px;
+      font-style: italic;
+      color: #333;
+    }
+
+    .testimonial .author {
+      font-style: normal;
+      font-weight: 600;
+      margin-top: 16px;
+      color: #222;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 2.4rem;
+    }
+
+    .stat span {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .price-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .price-card.featured {
+      border: 2px solid #222;
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+
+    .price-card h3 {
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .price {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .price small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #555;
+    }
+
+    .plan-features {
+      list-style: none;
+      text-align: left;
+      margin: 24px 0 28px;
+    }
+
+    .plan-features li {
+      padding: 6px 0;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      text-align: center;
+      border-bottom: none;
+    }
+
+    .final-cta h2 {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+    }
+
+    .final-cta p {
+      color: #555;
+      margin-bottom: 32px;
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #fafafa;
+      padding: 64px 0 32px;
+      border-top: 1px solid #eee;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .logo {
+      margin-bottom: 8px;
+    }
+
+    .footer-brand p {
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .footer-col h4 {
+      margin-bottom: 14px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #333;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 8px;
+    }
+
+    .footer-col a {
+      color: #555;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .footer-col a:hover {
+      color: #000;
+    }
+
+    .copyright {
+      text-align: center;
+      color: #888;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      .navbar {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .stats {
+        gap: 32px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Navigation -->
+  <header>
+    <div class="container">
+      <nav class="navbar">
+        <div class="logo">QuietFocus</div>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#cta" class="btn btn-primary">Start Writing Free</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 2. Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Write more. Worry less.</h1>
+      <p>The distraction-free writing timer that keeps you in flow. Set your timer, pick your soundscape, and just write.</p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn btn-primary">Start Writing Free →</a>
+        <a href="#how-it-works" class="link">See how it works ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Features -->
+  <section id="features">
+    <div class="container">
+      <h2 class="section-heading">Everything you need to stay in flow</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Focus Timer</h3>
+          <p>Customizable Pomodoro-style sessions (25, 45, or 60 min) with gentle audio cues that keep you writing without jarring interruptions.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Ambient Soundscapes</h3>
+          <p>Rain, café noise, fireplace, forest — pick the background mood that blocks distractions and gets your words flowing.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Daily Streaks</h3>
+          <p>Build a writing habit that sticks. Track your streak, hit milestones, and earn badges that keep you coming back.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Session Stats</h3>
+          <p>See your words per session, total writing time, and productivity trends in clean, simple charts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. How It Works -->
+  <section id="how-it-works">
+    <div class="container">
+      <h2 class="section-heading">Start writing in 3 steps</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Pick your duration</h3>
+          <p>Choose a 25, 45, or 60-minute writing sprint. Short enough to stay focused, long enough to make real progress.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Set the mood</h3>
+          <p>Select an ambient soundscape to block out the world. Rain on a window, a buzzing café, a crackling fire — your call.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Just write</h3>
+          <p>The timer runs, your streak builds, and your stats grow. No distractions, no notifications, just you and the page.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Social Proof -->
+  <section id="social-proof">
+    <div class="container">
+      <div class="testimonials">
+        <blockquote class="testimonial">
+          "QuietFocus turned my scattered 10-minute bursts into solid 45-minute writing sessions. I've never been this consistent."
+          <div class="author">— Maya K., Freelance Writer</div>
+        </blockquote>
+        <blockquote class="testimonial">
+          "I've written 3x more blog posts since I started using the streak feature. It's embarrassingly simple but it works."
+          <div class="author">— James R., Content Creator</div>
+        </blockquote>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <strong>12,000+</strong>
+          <span>Writers focused</span>
+        </div>
+        <div class="stat">
+          <strong>2.4M+</strong>
+          <span>Minutes in flow</span>
+        </div>
+        <div class="stat">
+          <strong>98%</strong>
+          <span>Say they write more</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Pricing -->
+  <section id="pricing">
+    <div class="container">
+      <h2 class="section-heading">Simple, transparent pricing</h2>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Starter</h3>
+          <div class="price">Free</div>
+          <ul class="plan-features">
+            <li>Focus timer</li>
+            <li>3 soundscapes</li>
+            <li>Basic streak tracking</li>
+            <li>Basic session stats</li>
+          </ul>
+          <a href="#cta" class="btn btn-secondary">Get Started Free</a>
+        </div>
+        <div class="price-card featured">
+          <div class="featured-badge">Most Popular</div>
+          <h3>Pro</h3>
+          <div class="price">$7<small>/month</small></div>
+          <ul class="plan-features">
+            <li>Everything in Starter</li>
+            <li>All 12 soundscapes</li>
+            <li>Full analytics dashboard</li>
+            <li>Export reports</li>
+          </ul>
+          <a href="#cta" class="btn btn-primary">Start Pro Trial</a>
+        </div>
+        <div class="price-card">
+          <h3>Team</h3>
+          <div class="price">$19<small>/month</small></div>
+          <ul class="plan-features">
+            <li>Everything in Pro</li>
+            <li>Team dashboard</li>
+            <li>Shared accountability groups</li>
+            <li>Admin controls</li>
+          </ul>
+          <a href="#cta" class="btn btn-secondary">Start Team Trial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Final CTA -->
+  <section id="cta" class="final-cta">
+    <div class="container">
+      <h2>Your next great piece starts with one focused session.</h2>
+      <p>Join 12,000+ writers who write more and worry less.</p>
+      <a href="#" class="btn btn-primary">Start Writing Free →</a>
+    </div>
+  </section>
+
+  <!-- 8. Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">QuietFocus</div>
+          <p>Write more. Worry less.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">&copy; 2025 QuietFocus. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
