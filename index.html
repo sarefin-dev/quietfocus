@@ -196,6 +196,22 @@
       text-align: center;
       padding: 140px 0 var(--space-12);
       background: var(--bg-warm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 1;
     }
 
     .hero h1 {
@@ -205,6 +221,22 @@
       letter-spacing: -0.02em;
       margin-bottom: var(--space-3);
       color: var(--text-primary);
+      min-height: 1.1em;
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 0.85em;
+      background: var(--accent);
+      margin-left: 2px;
+      vertical-align: -0.05em;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
     .hero p {
@@ -221,6 +253,29 @@
       justify-content: center;
       gap: var(--space-3);
       flex-wrap: wrap;
+    }
+
+    .hero-reveal {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .hero-reveal.visible {
+      opacity: 1;
+    }
+
+    .hero-cta-pulse {
+      animation: cta-pulse 2s ease-out infinite;
+      animation-delay: 5s;
+    }
+
+    @keyframes cta-pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(232, 114, 92, 0.35);
+      }
+      100% {
+        box-shadow: 0 0 0 20px rgba(232, 114, 92, 0);
+      }
     }
 
     .hero-actions .btn {
@@ -240,6 +295,25 @@
       color: var(--accent);
     }
 
+    /* ===== Scroll Reveal ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-card.reveal,
+    .step.reveal,
+    .testimonial.reveal,
+    .price-card.reveal {
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
     /* ===== Features ===== */
     .features-grid {
       display: grid;
@@ -257,7 +331,8 @@
     }
 
     .feature-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
     .feature-icon {
@@ -428,7 +503,8 @@
     }
 
     .price-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
     .price-card.featured {
@@ -725,10 +801,11 @@
 
   <!-- 2. Hero -->
   <section class="hero">
+    <canvas class="hero-canvas"></canvas>
     <div class="container">
       <h1>Write more. Worry less.</h1>
-      <p>The distraction-free writing timer that keeps you in flow. Set your timer, pick your soundscape, and just write.</p>
-      <div class="hero-actions">
+      <p class="hero-reveal">The distraction-free writing timer that keeps you in flow. Set your timer, pick your soundscape, and just write.</p>
+      <div class="hero-actions hero-reveal">
         <a href="#cta" class="btn btn-primary">Start Writing Free →</a>
         <a href="#how-it-works" class="link">See how it works ↓</a>
       </div>
@@ -932,30 +1009,281 @@
 
   <script>
     (function () {
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ===== 1. Typewriter Effect ===== */
+      var heroH1 = document.querySelector('.hero h1');
+      var heroSub = document.querySelector('.hero p');
+      var heroActions = document.querySelector('.hero-actions');
+
+      if (heroH1 && !prefersReducedMotion) {
+        var fullText = 'Write more. Worry less.';
+        heroH1.textContent = '';
+
+        var cursor = document.createElement('span');
+        cursor.className = 'typewriter-cursor';
+        heroH1.appendChild(cursor);
+
+        var charIndex = 0;
+
+        function typeChar() {
+          if (charIndex < fullText.length) {
+            heroH1.insertBefore(
+              document.createTextNode(fullText.charAt(charIndex)),
+              cursor
+            );
+            charIndex++;
+            setTimeout(typeChar, 80);
+          } else {
+            heroSub.classList.add('hero-reveal');
+            heroActions.classList.add('hero-reveal');
+
+            setTimeout(function () {
+              heroSub.classList.add('visible');
+              heroActions.classList.add('visible');
+            }, 500);
+          }
+        }
+
+        typeChar();
+      } else if (heroSub && heroActions) {
+        heroSub.classList.add('visible');
+        heroActions.classList.add('visible');
+      }
+
+      /* ===== 2. Ambient Drifting Dots Canvas ===== */
+      var heroCanvas = document.querySelector('.hero-canvas');
+
+      if (heroCanvas && !prefersReducedMotion) {
+        var ctx = heroCanvas.getContext('2d');
+        var dots = [];
+        var dotCount = 35;
+        var dotColors = ['232, 114, 92', '91, 140, 110'];
+        var width;
+        var height;
+
+        function resizeCanvas() {
+          var rect = heroCanvas.parentElement.getBoundingClientRect();
+          width = rect.width;
+          height = rect.height;
+          heroCanvas.width = width;
+          heroCanvas.height = height;
+        }
+
+        function initDots() {
+          dots = [];
+          for (var i = 0; i < dotCount; i++) {
+            dots.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              r: 2 + Math.random() * 2,
+              vx: 0.1 + Math.random() * 0.25,
+              vy: -0.05 + Math.random() * 0.15,
+              color: dotColors[Math.floor(Math.random() * dotColors.length)]
+            });
+          }
+        }
+
+        function animateDots() {
+          ctx.clearRect(0, 0, width, height);
+
+          for (var i = 0; i < dots.length; i++) {
+            var d = dots[i];
+            d.x += d.vx;
+            d.y += d.vy;
+
+            if (d.x > width + 10) d.x = -10;
+            if (d.x < -10) d.x = width + 10;
+            if (d.y > height + 10) d.y = -10;
+            if (d.y < -10) d.y = height + 10;
+
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + d.color + ', 0.15)';
+            ctx.fill();
+          }
+
+          requestAnimationFrame(animateDots);
+        }
+
+        resizeCanvas();
+        initDots();
+        animateDots();
+
+        window.addEventListener('resize', function () {
+          resizeCanvas();
+          initDots();
+        });
+      }
+
+      /* ===== 3. Scroll Reveal (IntersectionObserver) ===== */
+      var revealElements = document.querySelectorAll(
+        '.section-heading, .testimonials, .stats, .features-grid, .steps, .pricing-grid, .contact-subtext, .contact-form, .final-cta h2, .final-cta p, .final-cta .btn'
+      );
+
+      revealElements.forEach(function (el) {
+        el.classList.add('reveal');
+      });
+
+      if ('IntersectionObserver' in window) {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              requestAnimationFrame(function () {
+                entry.target.classList.add('visible');
+              });
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(function (el) {
+          revealObserver.observe(el);
+        });
+      } else {
+        revealElements.forEach(function (el) {
+          el.classList.add('visible');
+        });
+      }
+
+      /* ===== 4. Feature Cards — Staggered Reveal ===== */
+      var featureCards = document.querySelectorAll('.feature-card');
+
+      featureCards.forEach(function (card) {
+        card.classList.add('reveal');
+      });
+
+      if ('IntersectionObserver' in window) {
+        var featureObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              featureCards.forEach(function (card, index) {
+                setTimeout(function () {
+                  card.classList.add('visible');
+                }, index * 150);
+              });
+              featureObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+
+        if (featureCards.length > 0) {
+          featureObserver.observe(featureCards[0].parentElement);
+        }
+      } else {
+        featureCards.forEach(function (card) {
+          card.classList.add('visible');
+        });
+      }
+
+      /* ===== 5. Stats Counter ===== */
+      var statValues = [
+        { el: null, target: 12000, suffix: '+', isDecimal: false },
+        { el: null, target: 2.4, suffix: 'M+', isDecimal: true },
+        { el: null, target: 98, suffix: '%', isDecimal: false }
+      ];
+
+      var statStrongs = document.querySelectorAll('.stat strong');
+      statValues[0].el = statStrongs[0];
+      statValues[1].el = statStrongs[1];
+      statValues[2].el = statStrongs[2];
+
+      var statsAnimated = false;
+
+      function animateCounter(stat) {
+        if (!stat.el) return;
+        var startTime = null;
+        var duration = 2000;
+
+        function easeOutCubic(t) {
+          return 1 - Math.pow(1 - t, 3);
+        }
+
+        function step(timestamp) {
+          if (!startTime) startTime = timestamp;
+          var progress = Math.min((timestamp - startTime) / duration, 1);
+          var eased = easeOutCubic(progress);
+
+          var currentValue;
+          if (stat.isDecimal) {
+            currentValue = (stat.target * eased).toFixed(1);
+          } else {
+            currentValue = Math.floor(stat.target * eased).toLocaleString();
+          }
+
+          stat.el.textContent = currentValue + stat.suffix;
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            stat.el.textContent =
+              (stat.isDecimal ? stat.target.toFixed(1) : stat.target.toLocaleString()) +
+              stat.suffix;
+          }
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      if ('IntersectionObserver' in window && !prefersReducedMotion) {
+        var statsObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && !statsAnimated) {
+              statsAnimated = true;
+              statValues.forEach(function (stat) {
+                animateCounter(stat);
+              });
+              statsObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+
+        if (statStrongs.length > 0) {
+          statsObserver.observe(document.querySelector('.stats'));
+        }
+      } else if (prefersReducedMotion) {
+        statValues.forEach(function (stat) {
+          if (stat.el) {
+            stat.el.textContent =
+              (stat.isDecimal ? stat.target.toFixed(1) : stat.target.toLocaleString()) +
+              stat.suffix;
+          }
+        });
+      }
+
+      /* ===== 6. CTA Button Pulse ===== */
+      var heroCta = document.querySelector('.hero-actions .btn-primary');
+
+      if (heroCta && !prefersReducedMotion) {
+        heroCta.classList.add('hero-cta-pulse');
+      }
+
+      /* ===== Formspree ===== */
       var form = document.querySelector('.contact-form');
       var success = document.querySelector('.form-success');
 
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
 
-        var data = new FormData(form);
+          var data = new FormData(form);
 
-        fetch(form.action, {
-          method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        })
-        .then(function (response) {
-          if (response.ok) {
-            form.reset();
-            success.hidden = false;
-          }
-        })
-        .catch(function () {
-          /* Formspree AJAX fallback: allow default submission */
-          form.submit();
+          fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          })
+          .then(function (response) {
+            if (response.ok) {
+              form.reset();
+              success.hidden = false;
+            }
+          })
+          .catch(function () {
+            form.submit();
+          });
         });
-      });
+      }
     })();
   </script>
 
