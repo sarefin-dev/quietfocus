@@ -92,10 +92,19 @@
     }
 
     .logo {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .logo img {
+      display: block;
+      height: 36px;
+      width: auto;
+    }
+
+    .footer-brand .logo img {
+      height: 28px;
     }
 
     .nav-links {
@@ -685,8 +694,7 @@
     }
 
     .footer-brand .logo {
-      color: var(--footer-text);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .footer-brand p {
@@ -818,7 +826,9 @@
   <header id="header">
     <div class="container">
       <nav class="navbar">
-        <div class="logo">QuietFocus</div>
+        <div class="logo">
+          <img src="logo.png" alt="QuietFocus">
+        </div>
         <ul class="nav-links">
           <li><a href="#features">Features</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
@@ -1006,7 +1016,9 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo">QuietFocus</div>
+          <div class="logo">
+            <img src="logo.png" alt="QuietFocus">
+          </div>
           <p>Write more. Worry less.</p>
         </div>
         <div class="footer-col">
