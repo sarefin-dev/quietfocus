@@ -739,6 +739,34 @@
       padding-top: 28px;
     }
 
+    /* ===== Grid Fallbacks ===== */
+    @supports not (display: grid) {
+      .features-grid,
+      .steps,
+      .testimonials,
+      .pricing-grid,
+      .footer-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-3);
+      }
+
+      .feature-card,
+      .step,
+      .testimonial,
+      .price-card {
+        flex: 1 1 250px;
+      }
+
+      .footer-brand {
+        flex: 2 1 300px;
+      }
+
+      .footer-col {
+        flex: 1 1 150px;
+      }
+    }
+
     /* ===== Reduced Motion ===== */
     @media (prefers-reduced-motion: reduce) {
       html {
@@ -1261,6 +1289,15 @@
     (function () {
       var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+      /* requestAnimationFrame fallback for older browsers */
+      var raf = window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (callback) {
+          return window.setTimeout(callback, 16);
+        };
+
       /* ===== Hamburger Menu ===== */
       var hamburger = document.querySelector('.hamburger');
       var navLinks = document.querySelector('.nav-links');
@@ -1381,7 +1418,7 @@
             ctx.fill();
           }
 
-          requestAnimationFrame(animateDots);
+          raf(animateDots);
         }
 
         resizeCanvas();
@@ -1407,7 +1444,7 @@
         var revealObserver = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-              requestAnimationFrame(function () {
+              raf(function () {
                 entry.target.classList.add('visible');
               });
               revealObserver.unobserve(entry.target);
@@ -1492,7 +1529,7 @@
           stat.el.textContent = currentValue + stat.suffix;
 
           if (progress < 1) {
-            requestAnimationFrame(step);
+            raf(step);
           } else {
             stat.el.textContent =
               (stat.isDecimal ? stat.target.toFixed(1) : stat.target.toLocaleString()) +
@@ -1500,7 +1537,7 @@
           }
         }
 
-        requestAnimationFrame(step);
+        raf(step);
       }
 
       if ('IntersectionObserver' in window && !prefersReducedMotion) {
@@ -1520,6 +1557,16 @@
           statsObserver.observe(document.querySelector('.stats'));
         }
       } else if (prefersReducedMotion) {
+        statValues.forEach(function (stat) {
+          if (stat.el) {
+            stat.el.textContent =
+              (stat.isDecimal ? stat.target.toFixed(1) : stat.target.toLocaleString()) +
+              stat.suffix;
+          }
+        });
+      } else {
+        /* No IntersectionObserver support — show final values immediately */
+        statsAnimated = true;
         statValues.forEach(function (stat) {
           if (stat.el) {
             stat.el.textContent =
