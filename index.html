@@ -730,6 +730,36 @@
       padding-top: 28px;
     }
 
+    /* ===== Reduced Motion ===== */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .typewriter-cursor {
+        display: none;
+      }
+
+      .hero-canvas {
+        display: none;
+      }
+
+      .hero-reveal {
+        opacity: 1;
+        transition: none;
+      }
+
+      .hero-cta-pulse {
+        animation: none;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: translateY(0);
+        transition: none;
+      }
+    }
+
     /* ===== Responsive ===== */
     @media (max-width: 768px) {
       :root {
